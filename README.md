@@ -123,9 +123,9 @@ venv\Scripts\python
     * --clientcat
 
 ## Watchdir
-`ahd_uploader.py --client <path> --passkey <passkey> --cookie <file> --media  <"path"> --ui d  <"uid">`
+`ahd_uploader.py --client <path> --passkey <passkey> --cookie <file> --media <path> --uid  <"uid">`
 ## Config
-* Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optional
+* Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optiona
 
 * commandline options will replace any option in the config
 
