@@ -115,7 +115,7 @@ Other then imdb,screenshots. They are all optional
 
 
  ## [Programs]  
-> These control the paths to the required program. Only change if you want to use your own binaries
+> These control the paths to the required programs. Only change if you want to use your own binaries
     
 - -- wget : optional argument to change path to wget, programs comes with binary
 - -- dottorrent : optional argument to change path to dottorent, programs comes with binary
