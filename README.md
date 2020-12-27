@@ -1,3 +1,9 @@
+This channel is for testing the latest features/in development code. 
+Can't guarantee this will not be broken.
+
+
+
+
 *Add qbit
 
 *Add deluge
