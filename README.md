@@ -72,57 +72,56 @@ optional
 
 ## [Client]
 
--- client
-- rtorrent
-- qbit
-- transmission
-- deluge
+- -- client
+    - rtorrent
+    - qbit
+    - transmission
+    - deluge
 
--- clientpass:For clients that need passwords forauth
--- clientuser: For clients that need usernames for auth
--- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
--- client:name of client
--- clienturl: url for the client 
+- -- clientpass:For clients that need passwords forauth
+- -- clientuser: For clients that need usernames for auth
+- -- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
+- -- client:name of client
+- -- clienturl: url for the client 
 
 
 ## [AHD Auth]
-    
-    -- passkey: AHD passkey
-    -- cookies : A Cookie file in .txt format, not json
-    -- uid :your user id, used for getting lastest upload
+ These are all required to upload, autoretrive upload link  
+
+- -- passkey: AHD passkey
+- -- cookies : A cookie file in .txt format, not json
+- -- uid :your user id, used for getting lastest upload
 
 ## [Torrent]
     
 > These parameters control the final upload. Most can be changed after upload. \
-Other then imdb. They are all optional
+Other then imdb,screenshots. They are all optional
     
-    -- numscreens : optional argument to change how many screens shots, default is 9
+- -- numscreens : optional argument to change how many screens shots, default is 9
+
+ 
+> These upcoming parameters should not be changed at the moment in batchmode
+> As they will not reset after the first upload. 
+>     
+> --imdb
+> --mediatype
+> --codec
+> --group
+> --type
+> --userrelease
+> --specialedition
 
 
-
-    ***
-    These upcoming parameters should not be changed at the moment in batchmode
-    As they will not reset after the first upload. 
-    
-    --imdb
-    --mediatype
-    --codec
-    --group
-    --type
-    --userrelease
-    --specialedition
-
-    ***
 
 
  ## [Programs]  
     > These control the patys to the required program. Only change if you want to use your own binaries
     
-    -- wget : optional argument to change path to wget, programs comes with binary
-    -- dottorrent : optional argument to change path to dottorent, programs comes with binary
-    -- oxipng : optional argument to change path to oxipng, programs comes with binary
-    -- mtn : optional argument to change path to mtn, programs comes with binary
-    -- font : optional argument to change the ttf font file. Program comes with it own. Used for screenshots
+- -- wget : optional argument to change path to wget, programs comes with binary
+- -- dottorrent : optional argument to change path to dottorent, programs comes with binary
+- -- oxipng : optional argument to change path to oxipng, programs comes with binary
+- -- mtn : optional argument to change path to mtn, programs comes with binary
+- -- font : optional argument to change the ttf font file. Program comes with it own. Used for screenshots
 
 # Examples
     *Anything in brackets is to replace by user value
