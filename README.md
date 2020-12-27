@@ -131,7 +131,7 @@ ahd_uploader.py --client  "rtorrent"  --clienturl  "url"  --passkey  "passkey" -
     * --clientcat
 
 ### Watchdir
-ahd_uploader.py --client "path"  --passkey "passkey" --cookie "file" --media "path"
+ahd_uploader.py --client  <"path">  --passkey "passkey" --cookie "file" --media "path"
 --uid "uid"
 ### Config
 * Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optional
