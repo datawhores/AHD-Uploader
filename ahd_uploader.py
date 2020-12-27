@@ -46,7 +46,7 @@ def createconfig(arguments):
         config.read(configpath)
 
     except:
-        print("something went wrong")
+        print("Error reading config")
         return arguments
 
     if arguments.passkey==None and len(config['api']['passkey'])!=0:
@@ -394,43 +394,46 @@ def create_upload_form(arguments,inpath,outpath):
     preprocessing(single_file, arguments)
     torrent.join()
     release_info.join()
+
+
     arguments.title=os.path.basename(single_file)
 
 
 
-    form = {'submit': (None, 'true'),
-            'file_input': (os.path.basename(outpath), open(outpath, 'rb').read()),
-            'nfo_input': (None, ""),
-            'type': (None, arguments.type),
-            'imdblink': (None, arguments.imdb),
-            'file_media': (None, ""),
-            'pastelog': (None, get_mediainfo(single_file)),
-            'group': (None, arguments.group),
-            'remaster_title': (None, "Director's Cut"),
-            'othereditions': (None, ""),
-            'media': (None, arguments.mediatype),
-            'encoder': (None, arguments.codec),
+    form = {'submit':'true',
+            'nfo_input': "",
+            'type': arguments.type,
+            'imdblink': arguments.imdb,
+            'file_media': "",
+            'pastelog': get_mediainfo(single_file),
+            'group': arguments.group,
+            'remaster_title': "Director's Cut",
+            'othereditions': "",
+            'media': arguments.mediatype,
+            'encoder': arguments.codec,
             'release_desc': upload_screenshots(arguments.title,imgdir,arguments.passkey)}
+
+
     if arguments.group == 'UNKNOWN':
-        form['unknown_group'] = (None, 'on')
-        form['group'] = (None, '')
+        form['unknown_group'] = 'on'
+        form['group'] = ''
     if arguments.userrelease:
-        form['user'] = (None, 'on')
+        form['user'] = 'on'
     if arguments.specialedition:
-        form['remaster'] = (None, 'on')
+        form['remaster'] = 'on'
         if arguments.specialedition not in KNOWN_EDITIONS:
-            form['othereditions'] = (None, arguments.specialedition)
-            form['unknown'] = (None, 'on')
+            form['othereditions'] = arguments.specialedition
+            form['unknown'] = 'on'
         else:
-            form['remaster_title'] = (None, arguments.specialedition)
-    pickle.dump(form, open(outpath, 'wb'))
+            form['remaster_title'] = arguments.specialedition
 
 
+    return form
 
 
-def upload_command(arguments,path):
+def upload_command(arguments,form,torrent):
     assert Path(arguments.cookies).exists() and not Path(arguments.cookies).is_dir()
-    r = upload_form(arguments, pickle.load(open(path, 'rb')))
+    r = upload_form(arguments,form,torrent)
     if r.status_code == 200:
         pass
     else:
@@ -442,12 +445,14 @@ def upload_command(arguments,path):
         return None
 
 
-def upload_form(arguments, form):
+def upload_form(arguments, form,torrent):
     cj = http.cookiejar.MozillaCookieJar(arguments.cookies)
     cj.load()
+    files={'file_input': open(torrent,'rb')}
     return requests.post("https://awesome-hd.me/upload.php",
                          cookies=requests.utils.dict_from_cookiejar(cj),
-                         files=form,timeout=120)
+                         data=form,files=files,timeout=120)
+
 
 def getlink(arguments):
     #get the last upload from profile
@@ -468,10 +473,7 @@ def getlink(arguments):
         print("Error parsing link from Torrent Table")
         return
     return "https://awesome-hd.me/"+link
-def examine_form(form):
-    form = {k: v[1] for k, v in form.items()}
-    form['file_input'] = "<torrent_content>"
-    return form
+
 
 def download_torrent(arguments,ahd_link,path):
     shellbool=arguments.shellbool,
@@ -577,23 +579,23 @@ if __name__ == '__main__':
     parser.add_argument("--batchmode",default=None)
     arguments = parser.parse_args()
     arguments=createconfig(arguments)
-    outputpath=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
+    torrentpath=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
     create_binaries(arguments)
     keepgoing = "Yes"
     if os.path.isdir(arguments.media) and (arguments.batchmode==True or  arguments.batchmode=="True"):
         choices=os.listdir(arguments.media)
     else:
-        create_upload_form(arguments,arguments.media,outputpath)
-        ahd_link=upload_command(arguments,outputpath)
+        form=create_upload_form(arguments,arguments.media,torrentpath)
+        ahd_link=upload_command(arguments,form)
         if ahd_link!=None:
             print(ahd_link)
             download_torrent(arguments,ahd_link,path)
         else:
             print("Was Not able to get torrentlink")
         quit()
-    menu = TerminalMenu(choices)
     while keepgoing=="Yes" or keepgoing=="yes" or keepgoing=="Y" or keepgoing=="y"  or keepgoing=="YES":
         if sys.platform!="win32":
+            menu = TerminalMenu(choices)
             menu_entry_index = menu.show()
         else:
             for (i, item) in enumerate(choices):
@@ -610,8 +612,8 @@ if __name__ == '__main__':
             continue
         path=os.path.join(arguments.media,path)
         print("\n")
-        create_upload_form(arguments,path,outputpath)
-        ahd_link=upload_command(arguments,outputpath)
+        form=create_upload_form(arguments,path,torrentpath)
+        ahd_link=upload_command(arguments,form,torrentpath)
         if ahd_link!=None:
             print(ahd_link)
             download_torrent(arguments,ahd_link,path)
