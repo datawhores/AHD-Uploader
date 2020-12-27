@@ -110,24 +110,20 @@ venv\Scripts\python
     All optional
     
     -- wget : optional argument to change path to wget, programs comes with binary
-
     -- dottorrent : optional argument to change path to dottorent, programs comes with binary
     -- oxipng : optional argument to change path to oxipng, programs comes with binary
     -- mtn : optional argument to change path to mtn, programs comes with binary
-
-
--- font : optional argument to change the ttf font file. Program comes with it own. Used for screenshots
+    -- font : optional argument to change the ttf font file. Program comes with it own. Used for screenshots
 
 # Examples
-
+    *Anything in brackets is to replace by user value
 ## Rtorrent
-ahd_uploader.py --client  "rtorrent"  --clienturl  "url"  --passkey  "passkey" --cookie "file" --media "path" --uid "uid"
+ahd_uploader.py --client rtorrent --clienturl  <"url">  --passkey  <"passkey">  --cookie <"filepath"> --media <"path"> --uid <"uid">
     optional
     * --clientcat
 
 ## Watchdir
-ahd_uploader.py --client  <"path">  --passkey "passkey" --cookie "file" --media "path"
---uid "uid"
+ahd_uploader.py --client  <"path">  --passkey <"passkey"> --cookie <"file"<> --media <"path"> --uid <"uid">
 ## Config
 * Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optional
 
