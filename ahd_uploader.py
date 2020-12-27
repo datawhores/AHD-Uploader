@@ -3,8 +3,6 @@ import requests
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
-from pprint import pprint
-import pendulum
 import shutil
 import json
 import http.cookiejar
@@ -16,7 +14,6 @@ import pickle
 import math
 import sys
 from bs4 import BeautifulSoup
-
 import configparser
 from requests_html import HTML
 config = configparser.ConfigParser(allow_no_value=True)
