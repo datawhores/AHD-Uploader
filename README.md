@@ -80,7 +80,7 @@ optional
 
 - -- clientpass:For clients that need passwords forauth
 - -- clientuser: For clients that need usernames for auth
-- -- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
+- -- clientcat: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
 - -- client:name of client
 - -- clienturl: url for the client 
 
@@ -115,7 +115,7 @@ Other then imdb,screenshots. They are all optional
 
 
  ## [Programs]  
-    > These control the paths to the required program. Only change if you want to use your own binaries
+> These control the paths to the required program. Only change if you want to use your own binaries
     
 - -- wget : optional argument to change path to wget, programs comes with binary
 - -- dottorrent : optional argument to change path to dottorent, programs comes with binary
@@ -129,7 +129,7 @@ Other then imdb,screenshots. They are all optional
 `ahd_uploader.py --client rtorrent --clienturl <url> --passkey <passkey> --cookie <filepath> --media <path> --uid <uid>`
     
     optional
-    * --clientcat
+    - --clientcat
 
 ## Watchdir
 `ahd_uploader.py --client <path> --passkey <passkey> --cookie <file> --media <path> --uid  <uid>`
