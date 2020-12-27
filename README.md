@@ -1,12 +1,14 @@
-*Add qbit
+TODO
 
-*Add deluge
+* Add qbit
 
-*Add Transmission
+* Add deluge
 
-*ADD Template
+* Add Transmission
 
-* ADD ability to manually enter parameters
+* ADD Template
+
+* ADD ability to manually enter parameters for torrents i.e change category. While in batchmode
 
 
 
@@ -70,10 +72,10 @@ venv\Scripts\python
 [client]
     
     -- client
-        - rtorrent; url to scgi or xmlrpc
-        - qbit
-        - transmission
-        - deluge
+         rtorrent; url to scgi or xmlrpc
+         qbit
+         transmission
+         deluge
 
     -- clientpass:For clients that need passwords forauth
 
@@ -100,7 +102,7 @@ venv\Scripts\python
     These upcoming parameters should not be changed at the moment in batchmode
     As they will not reset after the first upload. 
     
-    --imdb",
+    --imdb
     --mediatype
     --codec
     --group
