@@ -93,7 +93,8 @@ venv\Scripts\python
 
 ## [Torrent]
     
->     These parameters control the final upload. Most can be changed after upload. Other then imdb. They are all optional
+> These parameters control the final upload. Most can be changed after upload. \
+Other then imdb. They are all optional
     
     -- numscreens : optional argument to change how many screens shots, default is 9
 
