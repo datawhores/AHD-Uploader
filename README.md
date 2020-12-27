@@ -62,27 +62,27 @@ venv\Scripts\python
 
 ## [general]
     
-    -- media:Can be a path or directory to upload torrents from. 
+-- media:Can be a path or directory to upload torrents from. 
     
   >   If a directory batchmode will start. Which will non-recursivly scan the drive, and output the result as menu. Where you can select the file/folder to upload. Non-recursive meaning what you see if you click the directory once. If you want to upload an entire folder as one upload, even if it has subfolders. --batchmode False will work
 
-    optional
+optional
     
-    --batchmode:Upload all elements in a directory
+--batchmode:Upload all elements in a directory
 
 ## [Client]
-    
-    -- client
-         rtorrent; url to scgi or xmlrpc
-         qbit
-         transmission
-         deluge
 
-    -- clientpass:For clients that need passwords forauth
-    -- clientuser: For clients that need usernames for auth
-    -- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
-    -- client:name of client
-    -- clienturl: url for the client 
+-- client
+- rtorrent
+- qbit
+- transmission
+- deluge
+
+-- clientpass:For clients that need passwords forauth
+-- clientuser: For clients that need usernames for auth
+-- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
+-- client:name of client
+-- clienturl: url for the client 
 
 
 ## [AHD Auth]
