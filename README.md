@@ -64,7 +64,7 @@ venv\Scripts\python
     
     -- media:Can be a path or directory to upload torrents from. 
     
-  >   If a directory batchmode will start. Which will non-recursivly scan the drive, and output the result as menu. Where you can select the file/folder to upload. Non-recurse meaning what you see if you click the directory once. If you want to upload an entire folder, even if it has subfolders. --batchmode False will work
+  >   If a directory batchmode will start. Which will non-recursivly scan the drive, and output the result as menu. Where you can select the file/folder to upload. Non-recursive meaning what you see if you click the directory once. If you want to upload an entire folder as one upload, even if it has subfolders. --batchmode False will work
 
     optional
     
