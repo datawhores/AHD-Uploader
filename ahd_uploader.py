@@ -1,4 +1,4 @@
-#! /usr/bin/env python3
+#!/usr/bin/env python3
 import requests
 import subprocess
 from argparse import ArgumentParser
@@ -89,6 +89,8 @@ def createconfig(arguments):
         arguments.dottorrent=config['programs']['dottorrent']
     if arguments.wget==None and len(config['programs']['wget'])>0 :
         arguments.wget=config['programs']['wget']
+    if arguments.fd==None and len(config['programs']['fd'])>0 :
+        arguments.fd=config['fd']['fd']
     return arguments
 
 
@@ -184,6 +186,18 @@ def create_binaries(arguments):
         else:
             wget=os.path.join(workingdir,"bin","wget.exe")
             arguments.wget=wget
+    if arguments.fd==None and sys.platform=="linux":
+        if len(which('fd'))>0:
+            arguments.fd=which('fd')
+        else:
+            fd=os.path.join(workingdir,"bin","fd")
+            arguments.fd=fd
+    if arguments.fd==None and sys.platform=="win32":
+        if len(which('fd.exe'))>0:
+            arguments,re=which('fd')
+        else:
+            fd=os.path.join(workingdir,"bin","fd.exe")
+            arguments.fd=fd
 
 
     if sys.platform=="win32":
@@ -378,18 +392,18 @@ def upload_screenshots(gallery_title, dir, key):
 
 
 
-def create_upload_form(arguments,inpath,outpath):
+def create_upload_form(arguments,inpath,torrentpath):
     if os.path.isdir(inpath):
-          for entity in os.scandir(inpath):
-              if re.search(".mkv",entity.name)!=None or re.search(".mp4",entity.name)!=None:
-                  single_file=os.path.join(inpath,entity.name)
-                  break
+        single_file=subprocess.run([arguments.fd,'.',inpath,'--max-results','1','-e','.mkv'],shell=arguments.shellbool)
+
+
+
     else:
         single_file=inpath
     imgdir = tempfile.TemporaryDirectory()
     release_info = Thread(target = take_screenshots, args = (single_file,imgdir,arguments.numscreens,arguments.font,arguments.mtn,arguments.oxipng,arguments.shellbool))
     release_info.start()
-    torrent=Thread(target = create_torrent, args = (inpath,outpath,arguments.dottorrent,arguments.shellbool))
+    torrent=Thread(target = create_torrent, args = (inpath,torrentpath,arguments.dottorrent,arguments.shellbool))
     torrent.start()
     preprocessing(single_file, arguments)
     torrent.join()
@@ -563,7 +577,6 @@ if __name__ == '__main__':
     parser.add_argument("--clientpass",default=None)
     parser.add_argument("--txtoutput",default=None)
     parser.add_argument("--font",default=None)
-    parser.add_argument("--announce",default="AUTO-DETECT")
     parser.add_argument("--imdb",default="AUTO-DETECT")
     parser.add_argument("--mediatype",default="AUTO-DETECT")
     parser.add_argument("--codec",default="AUTO-DETECT")
@@ -576,6 +589,7 @@ if __name__ == '__main__':
     parser.add_argument("--dottorrent",default=None)
     parser.add_argument("--wget",default=None)
     parser.add_argument("--mtn",default=None)
+    parser.add_argument("--fd",default=None)
     parser.add_argument("--batchmode",default=None)
     arguments = parser.parse_args()
     arguments=createconfig(arguments)
