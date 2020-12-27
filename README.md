@@ -61,11 +61,11 @@ venv\Scripts\python
 
 [general]
     
-    -- media=Can be a path or directory to upload torrents from
+    -- media:Can be a path or directory to upload torrents from
 
-    -- client=name of client
+    -- client:name of client
 
-    -- clienturl= url for the client 
+    -- clienturl: url for the client 
 
 [client]
     
@@ -75,25 +75,25 @@ venv\Scripts\python
         - transmission
         - deluge
 
-    -- clientpass=For clients that need passwords forauth
+    -- clientpass:For clients that need passwords forauth
 
-    -- clientuser= For clients that need usernames for auth
+    -- clientuser: For clients that need usernames for auth
 
-    -- clientlabel= Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
+    -- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
 
 
 [AHD Auth]
     
-    -- passkey= AHD passkey
+    -- passkey: AHD passkey
 
-    -- cookies = A Cookie file in .txt format, not json
-    -- uid =your user id, used for getting lastest upload
+    -- cookies : A Cookie file in .txt format, not json
+    -- uid :your user id, used for getting lastest upload
 
 [Torrent]
     All optional
     
-    -- numscreens = optional argument to change how many screens shots, default is 9
-    -- batchmode = if turned off, and --media is passed a directory. That directory will be treated as one upload
+    -- numscreens : optional argument to change how many screens shots, default is 9
+    -- batchmode : if turned off, and --media is passed a directory. That directory will be treated as one upload
 
 
     ***
@@ -112,14 +112,14 @@ venv\Scripts\python
  [Programs]  
     All optional
     
-    -- wget = optional argument to change path to wget, programs comes with binary
+    -- wget : optional argument to change path to wget, programs comes with binary
 
-    -- dottorrent = optional argument to change path to dottorent, programs comes with binary
-    -- oxipng = optional argument to change path to oxipng, programs comes with binary
-    -- mtn = optional argument to change path to mtn, programs comes with binary
+    -- dottorrent : optional argument to change path to dottorent, programs comes with binary
+    -- oxipng : optional argument to change path to oxipng, programs comes with binary
+    -- mtn : optional argument to change path to mtn, programs comes with binary
 
 
--- font = optional argument to change the ttf font file. Program comes with it own. Used for screenshots
+-- font : optional argument to change the ttf font file. Program comes with it own. Used for screenshots
 
 ## Examples
 
