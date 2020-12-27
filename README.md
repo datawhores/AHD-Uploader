@@ -93,10 +93,10 @@ venv\Scripts\python
 
 ## [Torrent]
     
-    All optional
+>     These parameters control the final upload. Most can be changed after upload. Other then imdb. They are all optional
     
     -- numscreens : optional argument to change how many screens shots, default is 9
-    -- batchmode : if turned off, and --media is passed a directory. That directory will be treated as one upload
+
 
 
     ***
@@ -115,7 +115,7 @@ venv\Scripts\python
 
 
  ## [Programs]  
-    All optional
+    > These control the patys to the required program. Only change if you want to use your own binaries
     
     -- wget : optional argument to change path to wget, programs comes with binary
     -- dottorrent : optional argument to change path to dottorent, programs comes with binary
