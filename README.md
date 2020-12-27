@@ -63,9 +63,7 @@ venv\Scripts\python
 ## [general]
     
     -- media:Can be a path or directory to upload torrents from
-
     -- client:name of client
-
     -- clienturl: url for the client 
 
 ## [Client]
@@ -77,16 +75,13 @@ venv\Scripts\python
          deluge
 
     -- clientpass:For clients that need passwords forauth
-
     -- clientuser: For clients that need usernames for auth
-
     -- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
 
 
 ## [AHD Auth]
     
     -- passkey: AHD passkey
-
     -- cookies : A Cookie file in .txt format, not json
     -- uid :your user id, used for getting lastest upload
 
