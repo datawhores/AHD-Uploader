@@ -57,11 +57,10 @@ on Windows
 venv\Scripts\python
 
 
-# Usage
-## parameters
+# Parameters
 
 
-### [general]
+## [general]
     
     -- media:Can be a path or directory to upload torrents from
 
@@ -69,7 +68,7 @@ venv\Scripts\python
 
     -- clienturl: url for the client 
 
-### [Client]
+## [Client]
     
     -- client
          rtorrent; url to scgi or xmlrpc
@@ -84,14 +83,14 @@ venv\Scripts\python
     -- clientlabel: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
 
 
-### [AHD Auth]
+## [AHD Auth]
     
     -- passkey: AHD passkey
 
     -- cookies : A Cookie file in .txt format, not json
     -- uid :your user id, used for getting lastest upload
 
-### [Torrent]
+## [Torrent]
     
     All optional
     
@@ -112,7 +111,7 @@ venv\Scripts\python
     ***
 
 
- ### [Programs]  
+ ## [Programs]  
     All optional
     
     -- wget : optional argument to change path to wget, programs comes with binary
@@ -124,17 +123,17 @@ venv\Scripts\python
 
 -- font : optional argument to change the ttf font file. Program comes with it own. Used for screenshots
 
-## Examples
+# Examples
 
-### Rtorrent
+## Rtorrent
 ahd_uploader.py --client  "rtorrent"  --clienturl  "url"  --passkey  "passkey" --cookie "file" --media "path" --uid "uid"
     optional
     * --clientcat
 
-### Watchdir
+## Watchdir
 ahd_uploader.py --client  <"path">  --passkey "passkey" --cookie "file" --media "path"
 --uid "uid"
-### Config
+## Config
 * Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optional
 
 * commandline options will replace any option in the config
