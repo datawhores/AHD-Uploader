@@ -6,7 +6,7 @@ TODO
 
 * Add Transmission
 
-* ADD Template
+* ADD Template System
 
 * ADD ability to manually enter parameters for torrents i.e change category. While in batchmode
 
