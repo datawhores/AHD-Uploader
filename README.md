@@ -118,17 +118,17 @@ venv\Scripts\python
 # Examples
     *Anything in brackets is to replace by user value
 ## Rtorrent
-ahd_uploader.py --client rtorrent --clienturl  <"url">  --passkey  <"passkey">  --cookie <"filepath"> --media <"path"> --uid <"uid">
+`ahd_uploader.py --client rtorrent --clienturl <url> --passkey <passkey> --cookie <filepath> --media <path> --uid <uid>`
     optional
     * --clientcat
 
 ## Watchdir
-ahd_uploader.py --client  <"path">  --passkey <"passkey"> --cookie <"file"<> --media <"path"> --uid <"uid">
+`ahd_uploader.py --client <path> --passkey <passkey> --cookie <file> --media  <"path">      --uid  <"uid">`
 ## Config
 * Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optional
 
 * commandline options will replace any option in the config
 
-ahd_uploader.py --config
+`ahd_uploader.py --config <configpath>`
 
 
