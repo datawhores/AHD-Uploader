@@ -78,6 +78,7 @@ optional
     - qbit
     - transmission
     - deluge
+    - watchdir:If  client is not any of the above values, then it is a "watchdir". To properly use pass the full path to the directory you want to upload to
 
 - -- clientpass:For clients that need passwords forauth
 - -- clientuser: For clients that need usernames for auth
