@@ -16,6 +16,7 @@ idna==2.10
 IMDbPY==2020.9.25
 lxml==4.6.2
 parse==1.18.0
+pendulum==2.1.2
 prompt-toolkit==3.0.8
 pyee==7.0.4
 Pygments==2.7.3
