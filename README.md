@@ -69,6 +69,7 @@ venv\Scripts\python
 optional
     
 --batchmode:Upload all elements in a directory
+--config:Pass arguments via a file instead of commandline. example.config is provided
 
 ## [Client]
 
@@ -134,7 +135,7 @@ Other then imdb,screenshots. They are all optional
 ## Watchdir
 `ahd_uploader.py --client <path> --passkey <passkey> --cookie <file> --media <path> --uid  <uid>`
 ## Config
-* Please make sure your config is filled with all required info, for example Rtorrent needs all the paramters from the example. The rest are unneeded/optiona
+* Please make sure your config is filled with all required info, for example rtorrent needs all the paramters from the rtorrent example. For Parameter Usage Please Go to the Parameter section
 
 * commandline options will replace any option in the config
 
