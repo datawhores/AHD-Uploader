@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
+#!/usr/bin/env python3
 import requests
 import subprocess
 from argparse import ArgumentParser
 from pathlib import Path
-from pprint import pprint
-import pendulum
 import shutil
 import json
 import http.cookiejar
@@ -16,7 +15,6 @@ import pickle
 import math
 import sys
 from bs4 import BeautifulSoup
-
 import configparser
 from requests_html import HTML
 config = configparser.ConfigParser(allow_no_value=True)
@@ -31,6 +29,7 @@ from shutil import which
 import bencode
 from pyrobase.parts import Bunch
 from rtorrent_xmlrpc import SCGIServerProxy
+
 
 if sys.platform!="win32":
    from simple_term_menu import TerminalMenu
@@ -78,7 +77,7 @@ def createconfig(arguments):
     if arguments.numscreens!=None :
         arguments.numscreens=int(arguments.numscreens)
     if arguments.numscreens==None and len(config['general']['numscreens'])==0:
-        arguments.numscreen=9
+        arguments.numscreens=9
     if arguments.numscreens==None and len(config['general']['numscreens'])!=0 :
         arguments.numscreen==int(config['general']['numscreens'])
     if arguments.mtn==None and len(config['programs']['mtn'])>0 :
@@ -194,7 +193,7 @@ def create_binaries(arguments):
             arguments.fd=fd
     if arguments.fd==None and sys.platform=="win32":
         if len(which('fd.exe'))>0:
-            arguments,re=which('fd')
+            arguments.fd=which('fd')
         else:
             fd=os.path.join(workingdir,"bin","fd.exe")
             arguments.fd=fd
@@ -359,6 +358,7 @@ def take_screenshots(path,dir,numscreens,font,mtn,oxipng,shellbool):
         if track.track_type == 'Video':
             interval=float(track.duration)/1000
             interval=math.floor(interval/numscreens)
+            break
     t=subprocess.run([mtn,'-n','-z','-f',font,'-o','.png','-w','0','-P','-s',str(interval),'-I',path,'-O',dir.name],shell=shellbool,stdout=subprocess.PIPE, stderr=subprocess.STDOUT,)
     #delete largest pic
 
@@ -394,7 +394,11 @@ def upload_screenshots(gallery_title, dir, key):
 
 def create_upload_form(arguments,inpath,torrentpath):
     if os.path.isdir(inpath):
-        single_file=subprocess.run([arguments.fd,'.',inpath,'--max-results','1','-e','.mkv'],shell=arguments.shellbool)
+        single_file=subprocess.run([arguments.fd,'.',inpath,'--max-results','1','-e','.mkv'],shell=arguments.shellbool,stdout=subprocess.PIPE).stdout.decode("utf-8")
+        single_file=single_file.rstrip()
+        single_file=f'{single_file}'
+
+
 
 
 
@@ -596,17 +600,24 @@ if __name__ == '__main__':
     torrentpath=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
     create_binaries(arguments)
     keepgoing = "Yes"
+    #setup batchmode
     if os.path.isdir(arguments.media) and (arguments.batchmode==True or  arguments.batchmode=="True"):
         choices=os.listdir(arguments.media)
+
+    #single upload
     else:
         form=create_upload_form(arguments,arguments.media,torrentpath)
-        ahd_link=upload_command(arguments,form)
+        ahd_link=upload_command(arguments,form,torrentpath)
         if ahd_link!=None:
             print(ahd_link)
-            download_torrent(arguments,ahd_link,path)
+            download_torrent(arguments,ahd_link,arguments.media)
         else:
             print("Was Not able to get torrentlink")
         quit()
+
+
+
+    #batchmode
     while keepgoing=="Yes" or keepgoing=="yes" or keepgoing=="Y" or keepgoing=="y"  or keepgoing=="YES":
         if sys.platform!="win32":
             menu = TerminalMenu(choices)
