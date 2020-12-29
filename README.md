@@ -70,6 +70,7 @@ optional
     
 --batchmode:Upload all elements in a directory
 --config:Pass arguments via a file instead of commandline. example.config is provided
+
 --log:**This does not take a path.** Valid inputs for this are debug,warn,info. In order of output descending debug,info, warn. If you having issues please run the program with 
 `--log debug` it will provide information about the process which will tell 
 
