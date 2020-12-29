@@ -494,7 +494,7 @@ def getlink(arguments):
 
 
 def download_torrent(arguments,ahd_link,path):
-    shellbool=arguments.shellbool,
+    shellbool=arguments.shellbool
     cookie=arguments.cookies
     wget=arguments.wget
     client=arguments.client
