@@ -20,40 +20,47 @@ git clone https://github.com/excludedBittern8/AHD-Uploader
 cd AHD-Uploader
 
 ## Creating a virtual enviroment
-A Virtual environment is recommended. Please Make sure you are on python3 and NOT python 2
+A Virtual environment is recommended. Please Make sure you are on python3 and NOT python2
 
-##### install virtualenv
-On macOS and Linux:
+ #####  <ins>Installing virtualenv<ins>
+**On macOS and Linux:**
 
 python3 -m pip install --user virtualenv
 
-On Windows:
+**On Windows**:
 
 py -m pip install --user virtualenv
 
-##### create the virtualenv
-On Linux:
+##### <ins>Creating the virtualenv<ins>
+**On Linux:**
 
 python3 -m venv venv
 
-On Windows:
+**On Windows:**
+
 python3 -m venv venv
-or
+
+alternatively
+
 py -m venv venv
-##### Add required modules
-On Linux:
+##### <ins>Add required modules<ins>
+**On Linux:**
 
 ./venv/bin/pip3 install -r requirements.txt
 
-On Windows:
+**On Windows:**
+
 
 venv\Scripts\pip3.exe install -r requirements.txt
 
-##### running python from venv
-On Linux
+##### <ins>Running python from venv<ins>
+**On Linux**
+
 /venv/bin/python3
 
-on Windows
+**on Windows**
+
+
 venv\Scripts\python
 
 
@@ -62,15 +69,17 @@ venv\Scripts\python
 
 ## [general]
     
--- media:Can be a path or directory to upload torrents from. 
+- -- media:Can be a path or directory to upload torrents from. 
     
   >   If a directory batchmode will start. Which will non-recursivly scan the drive, and output the result as menu. Where you can select the file/folder to upload. Non-recursive meaning what you see if you click the directory once. If you want to upload an entire folder as one upload, even if it has subfolders. --batchmode False will work
 
 optional
     
---batchmode:Upload all elements in a directory
---config:Pass arguments via a file instead of commandline. example.config is provided
---log:**This does not take a path.** Valid inputs for this are debug,warn,info. In order of output descending debug,info, warn. If you having issues please run the program with 
+
+- --batchmode:Upload all elements in a directory
+- --config:Pass arguments via a file instead of commandline. example.config is provided
+- 
+- --log:**This does not take a path.** Valid inputs for this are debug,warn,info. In order of output descending debug,info, warn. If you having issues please run the program with 
 `--log debug` it will provide information about the process which will tell 
 
 ## [Client]
