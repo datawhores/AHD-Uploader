@@ -73,7 +73,7 @@ optional
 
 ## [Client]
 
-- -- client
+- -- client:name of client
     - rtorrent
     - qbit
     - transmission
@@ -83,7 +83,6 @@ optional
 - -- clientpass:For clients that need passwords forauth
 - -- clientuser: For clients that need usernames for auth
 - -- clientcat: Naming my differ depending on client, this is the label,category,   etc   that your torrent will be added as in the client
-- -- client:name of client
 - -- clienturl: url for the client 
 
 
@@ -118,6 +117,12 @@ Other then imdb,screenshots. They are all optional
 
  ## [Programs]  
 > These control the paths to the required programs. Only change if you want to use your own binaries
+On windows please enter the fullpath. You can usually find that by 
+1. Enter python 
+2. from sys import which
+3. which(program)
+
+There is some combability issues with using path and windows, that causes issues with other commands in the program
     
 - -- wget : optional argument to change path to wget, programs comes with binary
 - -- dottorrent : optional argument to change path to dottorent, programs comes with binary
