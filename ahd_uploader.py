@@ -96,7 +96,7 @@ def createconfig(arguments):
     if arguments.wget==None and len(config['programs']['wget'])>0 :
         arguments.wget=config['programs']['wget']
     if arguments.fd==None and len(config['programs']['fd'])>0 :
-        arguments.fd=config['fd']['fd']
+        arguments.fd=config['programs']['fd']
 
         #set logger
 
