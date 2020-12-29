@@ -576,7 +576,9 @@ def download_torrent(arguments,ahd_link,path):
     if client=="rtorrent":
         temptor=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
         t=subprocess.run([wget,'--load-cookies',cookie,ahd_link,'-O',temptor],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        ahdlogger.debug(f"Downloading Temp Torrent:{t.stdout}")
+        #important line remove private infromation from download link
+        downloadurl=re.sub(arguments.passkey,"",t.stdout)
+        ahdlogger.debug(f"Downloading Temp Torrent:{downloadurl}")
         metainfo=bencode.bread(temptor)
         resumedata = add_fast_resume(metainfo, path)
         ahdlogger.info(f"resume date added?: {bencode.encode(resumedata)!=metainfo}")
