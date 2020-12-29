@@ -576,7 +576,7 @@ def download_torrent(arguments,ahd_link,path):
     if client=="rtorrent":
         temptor=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
         t=subprocess.run([wget,'--load-cookies',cookie,ahd_link,'-O',temptor],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        ahdlogger.debug(f"Downloading Temp Torrent:{t.args}")
+        ahdlogger.debug(f"Downloading Temp Torrent:{t.stdout}")
         metainfo=bencode.bread(temptor)
         resumedata = add_fast_resume(metainfo, path)
         ahdlogger.info(f"resume date added?: {bencode.encode(resumedata)!=metainfo}")
@@ -722,7 +722,7 @@ if __name__ == '__main__':
         form=create_upload_form(arguments,path,torrentpath)
         ahd_link=upload_command(arguments,form,torrentpath)
         if ahd_link!=None:
-            ahdlogger.info(ahd_link)
+            print(ahd_link)
             download_torrent(arguments,ahd_link,path)
         else:
             ahdlogger.warn("Was Not able to get torrentlink")
