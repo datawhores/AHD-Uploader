@@ -133,7 +133,7 @@ On windows please enter the fullpath. You can usually find that by
 2. from sys import which
 3. which(program)
 
-There is some combability issues with using path and windows, that causes issues with other commands in the program
+There is some combability issues with using path and windows, that causes issues with other commands in the program. So full paths are required on that plaform
     
 - -- wget : optional argument to change path to wget, programs comes with binary
 - -- dottorrent : optional argument to change path to dottorent, programs comes with binary
