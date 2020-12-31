@@ -386,7 +386,7 @@ def create_torrent(path,torrent,dottorrent):
 
 def get_mediainfo(path):
     print("Getting Mediainfo")
-    media_info = MediaInfo.parse(path,output="STRING")
+    media_info = MediaInfo.parse(path,full=False,output="STRING")
     media_info=media_info.encode(encoding='utf8')
     media_info=media_info.decode('utf8', 'strict')
     ahdlogger.debug(media_info)
@@ -731,4 +731,3 @@ if __name__ == '__main__':
         else:
             ahdlogger.warn("Was Not able to get torrentlink")
         keepgoing=input("Upload Another File: ")
-
