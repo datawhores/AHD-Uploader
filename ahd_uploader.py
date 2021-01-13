@@ -116,7 +116,12 @@ def createconfig(arguments):
 
 
 
-
+def clear_movie(arguments):
+    arguments.imdb="AUTO-DETECT"
+    arguments.mediatype="AUTO-DETECT"
+    arguments.codec="AUTO-DETECT"
+    arguments.group="AUTO-DETECT"
+    arguments.type="AUTO-DETECT"
 
 
 
@@ -124,6 +129,7 @@ def createconfig(arguments):
 
 
 def get_imdb_info(path):
+
     details=guessit(path)
     title = details['title']
     if 'year' in details:
@@ -143,7 +149,7 @@ def get_imdb_info(path):
     counter=0
     accept=False
     ahdlogger.warn("Searching for movie/TV Show on IMDB\n")
-    while accept==False:
+    while accept!=True:
         if counter==6:
             id=input("Please Enter imdb id: ")
             id=re.sub("https://www.imdb.com/title/","",id)
@@ -160,10 +166,13 @@ def get_imdb_info(path):
             (False, "No"),
         ],
         title=t,
-        text="is this correct movie/tv title?",
+        text="is this correct movie/tv title?\nPress Cancel to Enter imdb directly",
         ).run()
+        if accept==None:
+            counter=6
         if accept==False:
             counter=counter+1
+
     if accept==False:
         id=input("Please Enter imdb id")
         id=re.sub("https://www.imdb.com/title/","",id)
@@ -446,7 +455,7 @@ def upload_screenshots(gallery_title, dir, key):
 
 
 def create_upload_form(arguments,inpath,torrentpath):
-    print("Starting UploadForm Process")
+    print("Starting UploadForm Process: ",inpath)
     t=datetime.now().strftime("%m.%d.%Y_%H%M")
     ahdlogger.warn(f"Creating Form {t}")
     if os.path.isdir(inpath):
@@ -689,6 +698,9 @@ if __name__ == '__main__':
     #setup batchmode
     if os.path.isdir(arguments.media) and (arguments.batchmode==True or  arguments.batchmode=="True"):
         choices=sorted(os.listdir(arguments.media))
+        if len(choices)==0:
+            print("Upload Folder is Empty")
+            quit()
 
 
     #single upload
@@ -730,4 +742,5 @@ if __name__ == '__main__':
             download_torrent(arguments,ahd_link,path)
         else:
             ahdlogger.warn("Was Not able to get torrentlink")
+        clear_movie(arguments)
         keepgoing=input("Upload Another File: ")
