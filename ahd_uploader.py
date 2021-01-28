@@ -19,7 +19,7 @@ from requests_html import HTML
 config = configparser.ConfigParser(allow_no_value=True)
 from prompt_toolkit import prompt
 from prompt_toolkit.completion import WordCompleter
-from prompt_toolkit.shortcuts import radiolist_dialog,button_dialog,input_dialog
+
 
 import re
 from pymediainfo import MediaInfo
@@ -29,15 +29,45 @@ import bencode
 from pyrobase.parts import Bunch
 from rtorrent_xmlrpc import SCGIServerProxy
 import logging
-import copy
 from datetime import datetime
 from consolemenu import SelectionMenu
+import copy
 
 
 if sys.platform!="win32":
    from simple_term_menu import TerminalMenu
 
 KNOWN_EDITIONS = ["Director's Cut", "Unrated", "Extended Edition", "2 in 1", "The Criterion Collection"]
+
+
+class filter(logging.Filter):
+    def __init__(self, arguments):
+        super(filter, self).__init__()
+        self.arguments = arguments
+
+    def filter(self, rec):
+        if rec.msg==None:
+             return 1
+        #change Memory address of input
+        rec.msg=copy.deepcopy(rec.msg)
+        try:
+            rec.msg=rec.msg.decode('utf8', 'strict')
+        except:
+            pass
+
+        try:
+            rec.msg=vars(rec.msg)
+        except:
+            pass
+
+        if type(rec.msg)==str:
+            rec.msg=re.sub(self.arguments.passkey,"your_passkey",rec.msg)
+
+        elif type(rec.msg)==dict and rec.msg.get('passkey')!=None:
+            rec.msg['passkey']="your_passkey"
+        return 1
+
+
 
 def createconfig(arguments):
     if arguments.config==None or os.path.exists(arguments.config)==False:
@@ -98,7 +128,20 @@ def createconfig(arguments):
     if arguments.fd==None and len(config['programs']['fd'])>0 :
         arguments.fd=config['programs']['fd']
 
-        #set logger
+
+    #reset options to auto if in batchmode
+    if arguments.batchmode==True:
+        print("Batchmode is ON\n","Forcing Options\n","imdb set to AUTO-DETECT\n","mediatype set to AUTO-DETECT\n","codec set to AUTO-DETECT\n" \
+        ,"group set to AUTO-DETECT\n","type set to AUTO-DETECT\n")
+        arguments.imdb="AUTO-DETECT"
+        arguments.mediatype="AUTO-DETECT"
+        arguments.codec="AUTO-DETECT"
+        arguments.group="AUTO-DETECT"
+        arguments.type="AUTO-DETECT"
+
+
+
+    #set logger
 
     if arguments.log.upper() == "DEBUG":
         ahdlogger.setLevel(logging.DEBUG)
@@ -106,15 +149,9 @@ def createconfig(arguments):
         ahdlogger.setLevel(logging.INFO)
     else:
         ahdlogger.setLevel(logging.WARN)
+    ahdlogger.debug(arguments)
 
-    #This line is critical to hide crtical information
-    t=copy.deepcopy(arguments)
-    t.passkey=None
-    t.uid=None
-    ahdlogger.debug(t)
     return arguments
-
-
 
 def clear_movie(arguments):
     arguments.imdb="AUTO-DETECT"
@@ -137,19 +174,19 @@ def get_imdb_info(path):
     results = IMDb().search_movie(title)
     if len(results)==0 :
         ahdlogger.warn("Unable to find imdb")
-        id = input("Enter Title or imdb(no tt) ")
-        if re.search("tt",id)!=None:
-            results=IMDb().get_movie(id)
-        else:
-            results = IMDb().search_movie(id)
+        id=input("Please Enter imdb id: ")
+        id=re.sub("https://www.imdb.com/title/","",id)
+        id=re.sub("tt","",id)
+        id=re.sub("/","",id)
+        results=IMDb().get_movie(id)
     ahdlogger.debug(results)
     if isinstance(results, list)!=True:
         return results
 
     counter=0
-    accept=False
+    accept='No'
     ahdlogger.warn("Searching for movie/TV Show on IMDB\n")
-    while accept!=True:
+    while accept!="Yes":
         if counter==6:
             id=input("Please Enter imdb id: ")
             id=re.sub("https://www.imdb.com/title/","",id)
@@ -159,21 +196,19 @@ def get_imdb_info(path):
             return results
         title=results[counter]['title']
         year=str(results[counter]['year'])
-        t=f"{title} {year}"
-        accept = radiolist_dialog(
-        values=[
-            (True, "Yes"),
-            (False, "No"),
-        ],
-        title=t,
-        text="is this correct movie/tv title?\nPress Cancel to Enter imdb directly",
-        ).run()
-        if accept==None:
-            counter=6
-        if accept==False:
+        t=f"{title}  {{ Movie Released-{year}}}"
+        print(t)
+        options=["Yes","No"]
+        if sys.platform!="win32":
+            menu = TerminalMenu(options)
+            menu_entry_index = menu.show()
+        else:
+            menu_entry_index = SelectionMenu.get_selection(options)
+        accept=options[menu_entry_index]
+        if accept=="No":
             counter=counter+1
 
-    if accept==False:
+    if accept=="No":
         id=input("Please Enter imdb id")
         id=re.sub("https://www.imdb.com/title/","",id)
         id=re.sub("tt","",id)
@@ -282,29 +317,17 @@ def autodetect_media_type(path):
         return 'DTheater'
     elif re.search("XDCAM",path,re.IGNORECASE)!=None:
         return 'XDCAM'
-    confirm=False
-    while confirm==False:
-        upstring=os.path.basename(path) +": What Type of Upload Do you Have"
-        value= radiolist_dialog(
-        values=[
-            ("Blu-ray", "Blu-ray"),
-            ("HD-DVD", "HD-DVD"),
-            ("HDTV", "HDTV"),
-            ("WEB-DL", "WEB-DL"),
-            ("WEBRip", "WEBRip"),
-            ("DTheater", "DTheater"),
-            ("XDCAM", "XDCAM"),
-            ("UHD Blu-ray", "UHD Blu-ray"),
-        ],
-        title="Type",
-        text=upstring,
-        ).run()
-        if value==None:
-            quit()
-        confirm = button_dialog(
-            title=value,
-            buttons=[("Correct?", True), ("No", False)],
-        ).run()
+    options=["Blu-ray","HD-DVD","HDTV","WEB-DL","WEBRip","DTheater","XDCAM","UHD Blu-ray"]
+
+
+    upstring=f"{os.path.basename(path)}\nWhat is the Source of the Upload?"
+    print(upstring)
+    if sys.platform!="win32":
+            menu = TerminalMenu(options)
+            menu_entry_index = menu.show()
+    else:
+        menu_entry_index = SelectionMenu.get_selection(options)
+    value=options[menu_entry_index]
     return value
 
 
@@ -324,27 +347,18 @@ def autodetect_codec(path):
         return 'VC-1 Remux'
     elif re.search("MPEG2 Remux",path,re.IGNORECASE)!=None:
         return 'MPEG2 Remux'
-    confirm=False
-    while confirm==False:
-        upstring=os.path.basename(path)+"\n What is the codec of the Upload"
-        value= radiolist_dialog(
-        values=[
-            ("x264", "x264"),
-            ("h.264 Remux", "h.264 Remux"),
-            ("x265", "x265"),
-            ("h.265 Remux", "h.265 Remux"),
-            ("VC-1 Remux", "VC-1 Remux"),
-            ("MPEG2 Remux", "MPEG2 Remux"),
-        ],
-        title="Type",
-        text=upstring,
-        ).run()
-        if value==None:
-            quit()
-        confirm = button_dialog(
-            title=value,
-            buttons=[("Correct?", True), ("No", False)],
-        ).run()
+
+    upstring=f"{os.path.basename(path)}\nWhat is the codec of the Upload?"
+    print(upstring)
+
+    options=["x264","h.264 Remux","x265","h.265 Remux","VC-1 Remux""MPEG2 Remux"]
+
+    if sys.platform!="win32":
+            menu = TerminalMenu(options)
+            menu_entry_index = menu.show()
+    else:
+        menu_entry_index = SelectionMenu.get_selection(options)
+    value=options[menu_entry_index]
     return value
 
 
@@ -395,7 +409,8 @@ def create_torrent(path,torrent,dottorrent):
 
 def get_mediainfo(path):
     print("Getting Mediainfo")
-    media_info = MediaInfo.parse(path,full=False,output="STRING")
+    media_info = MediaInfo.parse(path, output="STRING", full=False)
+
     media_info=media_info.encode(encoding='utf8')
     media_info=media_info.decode('utf8', 'strict')
     ahdlogger.debug(media_info)
@@ -440,7 +455,7 @@ def upload_screenshots(gallery_title, dir, key):
             file=os.path.join(dir.name,file.name)
             data_payload = {'apikey': key, 'galleryid': 'new', 'gallerytitle': gallery_title}
             files_payload = [('image[]', (os.path.basename(file),open(file, 'rb')))]
-            t=requests.post('https://img.awesome-hd.me/api/upload', data=data_payload,files=files_payload)
+            t=requests.post('https://img.awesome-hd.club/api/upload', data=data_payload,files=files_payload)
             ahdlogger.debug(f"uploaded {file} {t.status_code}")
             if t!=None:
                 ahdlogger.debug(f"{t.json()}\n")
@@ -465,9 +480,14 @@ def create_upload_form(arguments,inpath,torrentpath):
 
 
 
-
     else:
         single_file=inpath
+
+
+
+
+
+
     ahdlogger.debug(f"single file: {single_file}")
     ahdlogger.debug(f"Uploading Path: {inpath}")
     imgdir = tempfile.TemporaryDirectory()
@@ -480,9 +500,6 @@ def create_upload_form(arguments,inpath,torrentpath):
     release_info.join()
 
     arguments.title=os.path.basename(single_file)
-
-
-
     form = {'submit':'true',
             'nfo_input': "",
             'type': arguments.type,
@@ -534,7 +551,7 @@ def upload_form(arguments, form,torrent):
     cj.load()
     files={'file_input': open(torrent,'rb')}
     try:
-        t=requests.post("https://awesome-hd.me/upload.php",
+        t=requests.post("https://awesome-hd.club/upload.php",
                          cookies=requests.utils.dict_from_cookiejar(cj),
                          data=form,files=files,timeout=120)
     except:
@@ -550,7 +567,7 @@ def getlink(arguments):
     #get the last upload from profile
     cj = http.cookiejar.MozillaCookieJar(arguments.cookies)
     cj.load()
-    t=requests.post(f"https://awesome-hd.me/torrents.php?type=uploaded&userid={arguments.uid}",
+    t=requests.post(f"https://awesome-hd.club/torrents.php?type=uploaded&userid={arguments.uid}",
                          cookies=requests.utils.dict_from_cookiejar(cj),
                          timeout=120)
     soup = BeautifulSoup(t.text, 'html.parser')
@@ -565,7 +582,7 @@ def getlink(arguments):
     except:
         ahdlogger.warn("Error parsing link from Torrent Table")
         return
-    return "https://awesome-hd.me/"+link
+    return "https://awesome-hd.club/"+link
 
 
 def download_torrent(arguments,ahd_link,path):
@@ -586,9 +603,8 @@ def download_torrent(arguments,ahd_link,path):
         temptor=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
         t=subprocess.run([wget,'--load-cookies',cookie,ahd_link,'-O',temptor],stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         #important line remove private infromation from download link
-        t=f"Downloading Temp Torrent:{t.stdout}"
-        t=re.sub(arguments.passkey,"",t)
-        t=re.sub("torrentpass=","",t)
+
+        t=f"Downloading Temp Torrent:{t.stdout.decode('utf8', 'strict')}"
         ahdlogger.debug(t)
         metainfo=bencode.bread(temptor)
         resumedata = add_fast_resume(metainfo, path)
@@ -657,11 +673,7 @@ if __name__ == '__main__':
     except:
         pass
     #Create Logger
-    ahdlogger = logging.getLogger('AHD')
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    filehandler=logging.FileHandler(os.path.join(workingdir,"Logs","ahdupload.logs"))
-    filehandler.setFormatter(formatter)
-    ahdlogger.addHandler(filehandler)
+
     parser = ArgumentParser()
     parser.add_argument("--media",default=None)
     parser.add_argument("--config",default=None)
@@ -691,6 +703,13 @@ if __name__ == '__main__':
     parser.add_argument("--batchmode",default=None)
     parser.add_argument("--log",default=None)
     arguments = parser.parse_args()
+    ahdlogger = logging.getLogger('AHD')
+    myfilter=filter(arguments)
+    ahdlogger.addFilter(myfilter)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    filehandler=logging.FileHandler(os.path.join(workingdir,"Logs","ahdupload.logs"))
+    filehandler.setFormatter(formatter)
+    ahdlogger.addHandler(filehandler)
     arguments=createconfig(arguments)
     torrentpath=os.path.join(tempfile.gettempdir(), os.urandom(24).hex()+".torrent")
     create_binaries(arguments)
